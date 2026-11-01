@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SKULL AI</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#212121;color:white;font-family:Arial,sans-serif}
+header{padding:20px;border-bottom:1px solid #444;display:flex;align-items:center;gap:12px}
+.logo{background:white;color:black;border-radius:12px;padding:12px;font-size:24px}
+h1{font-size:21px;letter-spacing:2px;margin:0}
+small{color:#aaa}
+main{max-width:850px;margin:auto;padding:24px}
+.hero{padding:35px 0}
+.hero h2{font-size:42px;margin:10px 0}
+.hero p{color:#aaa}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
+button{cursor:pointer;border:0;border-radius:10px;padding:12px 16px;font-weight:bold}
+.tab{background:#383838;color:white}
+.tab.active,.send{background:white;color:black}
+.card{background:#303030;border:1px solid #484848;border-radius:16px;padding:20px;margin:15px 0}
+input,textarea{width:100%;background:#202020;color:white;border:1px solid #555;border-radius:10px;padding:13px;margin:8px 0;font-size:15px}
+textarea{min-height:100px}
+.send{margin-top:8px}
+.chat{height:260px;overflow:auto;background:#202020;border-radius:12px;padding:12px}
+.msg{padding:10px 13px;border-radius:12px;margin:8px 0;white-space:pre-wrap}
+.bot{background:#383838}.user{background:#555;text-align:right}
+.preview{border:1px dashed #777;border-radius:12px;min-height:130px;padding:15px;margin-top:12px;color:#aaa;text-align:center}
+.preview img{max-width:100%;max-height:250px}
+.note{font-size:12px;color:#aaa}
+footer{text-align:center;color:#888;padding:30px}
+@media(max-width:600px){main{padding:15px}.hero h2{font-size:34px}}
+</style>
+</head>
+<body>
+<header>
+<div class="logo">💀</div>
+<div><h1>SKULL AI</h1><small>NO LIMITS. JUST SKULL.</small></div>
+</header>
+<main>
+<section class="hero">
+<small>YOUR CREATIVE SIDEKICK</small>
+<h2>MAKE IT HAPPEN.</h2>
+<p>Yo. 여기는 스컬의 영역이야. 궁금한 걸 물어봐.</p>
+</section>
+
+<div class="tabs">
+<button class="tab active" onclick="show('chat',this)">💬 질문 답변</button>
+<button class="tab" onclick="show('image',this)">🎨 이미지 생성</button>
+<button class="tab" onclick="show('edit',this)">🖼️ 이미지 합성</button>
+</div>
+
+<section class="card" id="chat">
+<h3>💬 스컬에게 물어봐</h3>
+<div class="chat" id="messages">
+<div class="msg bot">Yo! 스컬 접속 완료. 💀<br>뭐가 궁금한데?</div>
+</div>
+<input id="question" placeholder="질문을 입력해..." onkeydown="if(event.key==='Enter')send()">
+<button class="send" onclick="send()">전송 ↗</button>
+<p class="note">현재 데모 버전입니다. 실제 AI 답변은 AI 모델 연결 후 작동합니다.</p>
+</section>
+
+<section class="card" id="image" hidden>
+<h3>🎨 이미지 생성</h3>
+<p>만들고 싶은 이미지를 설명해 봐.</p>
+<textarea id="prompt" placeholder="예: 어두운 도시의 사이버펑크 해골..."></textarea>
+<button class="send" onclick="makePrompt()">생성 요청 준비</button>
+<div class="preview" id="result">이미지 결과가 여기에 표시돼.</div>
+<p class="note">실제 이미지 생성 모델은 아직 연결되지 않았어.</p>
+</section>
+
+<section class="card" id="edit" hidden>
+<h3>🖼️ 이미지 합성 / 편집</h3>
+<input type="file" accept="image/*" onchange="previewImage(event)">
+<div class="preview" id="photo">이미지를 선택해 줘.</div>
+<textarea id="editText" placeholder="어떻게 편집할까?"></textarea>
+<button class="send" onclick="alert('이미지 편집 AI 연결이 필요해!')">편집 요청</button>
+</section>
+</main>
+<footer>SKULL AI · VERSION 0.2</footer>
+
+<script>
+function show(id,btn){
+document.querySelectorAll('.card').forEach(x=>x.hidden=true);
+document.getElementById(id).hidden=false;
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+btn.classList.add('active');
+}
+function send(){
+let q=document.getElementById('question');
+let v=q.value.trim();
+if(!v)return;
+let box=document.getElementById('messages');
+box.innerHTML+='<div class="msg user"></div>';
+box.lastElementChild.textContent=v;
+box.innerHTML+='<div class="msg bot">아직 AI 두뇌를 연결하지 않았어. 조금만 기다려! 💀</div>';
+q.value='';
+box.scrollTop=box.scrollHeight;
+}
+function makePrompt(){
+let p=document.getElementById('prompt').value.trim();
+document.getElementById('result').textContent=p?'이미지 생성 요청 준비 완료: '+p:'먼저 설명을 입력해 줘!';
+}
+function previewImage(e){
+let f=e.target.files[0];
+if(!f)return;
+let img=document.createElement('img');
+img.src=URL.createObjectURL(f);
+let area=document.getElementById('photo');
+area.innerHTML='';
+area.appendChild(img);
+}
+</script>
+</body>
+</html>
