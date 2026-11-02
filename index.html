@@ -1,116 +1,138 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>SKULL AI</title>
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#212121;color:white;font-family:Arial,sans-serif}
-header{padding:20px;border-bottom:1px solid #444;display:flex;align-items:center;gap:12px}
-.logo{background:white;color:black;border-radius:12px;padding:12px;font-size:24px}
-h1{font-size:21px;letter-spacing:2px;margin:0}
-small{color:#aaa}
-main{max-width:850px;margin:auto;padding:24px}
-.hero{padding:35px 0}
-.hero h2{font-size:42px;margin:10px 0}
-.hero p{color:#aaa}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}
-button{cursor:pointer;border:0;border-radius:10px;padding:12px 16px;font-weight:bold}
-.tab{background:#383838;color:white}
-.tab.active,.send{background:white;color:black}
-.card{background:#303030;border:1px solid #484848;border-radius:16px;padding:20px;margin:15px 0}
-input,textarea{width:100%;background:#202020;color:white;border:1px solid #555;border-radius:10px;padding:13px;margin:8px 0;font-size:15px}
-textarea{min-height:100px}
-.send{margin-top:8px}
-.chat{height:260px;overflow:auto;background:#202020;border-radius:12px;padding:12px}
-.msg{padding:10px 13px;border-radius:12px;margin:8px 0;white-space:pre-wrap}
-.bot{background:#383838}.user{background:#555;text-align:right}
-.preview{border:1px dashed #777;border-radius:12px;min-height:130px;padding:15px;margin-top:12px;color:#aaa;text-align:center}
-.preview img{max-width:100%;max-height:250px}
-.note{font-size:12px;color:#aaa}
-footer{text-align:center;color:#888;padding:30px}
-@media(max-width:600px){main{padding:15px}.hero h2{font-size:34px}}
+body{margin:0;background:#090909;color:#f5f5f5;font-family:Arial,sans-serif}
+header{padding:22px 7%;border-bottom:1px solid #292929;display:flex;justify-content:space-between;align-items:center}
+.logo{font-size:24px;font-weight:900;letter-spacing:2px}
+.logo span{color:#888}
+.tag{font-size:11px;color:#888;letter-spacing:2px}
+main{max-width:850px;margin:55px auto;padding:0 20px}
+h1{font-size:48px;margin:0 0 8px;font-weight:900}
+.sub{color:#888;margin-bottom:35px}
+.tabs{display:flex;gap:10px;margin-bottom:22px;flex-wrap:wrap}
+.tab,button{background:#1c1c1c;color:white;border:1px solid #333;border-radius:10px;padding:12px 17px;cursor:pointer}
+.tab.active,button:hover{background:white;color:black}
+.panel{background:#111;border:1px solid #292929;border-radius:16px;padding:22px}
+.hidden{display:none}
+input,textarea{width:100%;background:#080808;border:1px solid #333;color:white;padding:14px;border-radius:10px;margin:8px 0;font-size:15px}
+textarea{resize:vertical;min-height:90px}
+button{margin-top:10px;font-weight:bold}
+.messages{height:270px;overflow:auto;margin-bottom:12px}
+.msg{padding:12px 15px;background:#202020;border-radius:12px;margin:9px 0;max-width:90%;white-space:pre-wrap}
+.msg.me{margin-left:auto;background:#eee;color:#111}
+.hint{color:#777;font-size:12px;line-height:1.6}
+.preview{display:flex;gap:12px;flex-wrap:wrap;margin-top:15px}
+.preview img{width:45%;max-height:220px;object-fit:contain;background:#080808;border-radius:10px}
+footer{text-align:center;color:#555;padding:35px;font-size:11px;letter-spacing:2px}
 </style>
 </head>
 <body>
 <header>
-<div class="logo">💀</div>
-<div><h1>SKULL AI</h1><small>NO LIMITS. JUST SKULL.</small></div>
+<div class="logo">💀 SKULL<span> AI</span></div>
+<div class="tag">NO LIMITS. JUST SKULL.</div>
 </header>
+
 <main>
-<section class="hero">
-<small>YOUR CREATIVE SIDEKICK</small>
-<h2>MAKE IT HAPPEN.</h2>
-<p>Yo. 여기는 스컬의 영역이야. 궁금한 걸 물어봐.</p>
-</section>
+<h1>MAKE IT HAPPEN.</h1>
+<p class="sub">Your ideas. Your world. Your SKULL.</p>
 
 <div class="tabs">
-<button class="tab active" onclick="show('chat',this)">💬 질문 답변</button>
-<button class="tab" onclick="show('image',this)">🎨 이미지 생성</button>
-<button class="tab" onclick="show('edit',this)">🖼️ 이미지 합성</button>
+<button class="tab active" onclick="showTab('chat',this)">질문 답변</button>
+<button class="tab" onclick="showTab('generate',this)">이미지 생성</button>
+<button class="tab" onclick="showTab('edit',this)">이미지 합성</button>
 </div>
 
-<section class="card" id="chat">
-<h3>💬 스컬에게 물어봐</h3>
-<div class="chat" id="messages">
-<div class="msg bot">Yo! 스컬 접속 완료. 💀<br>뭐가 궁금한데?</div>
+<section id="chat" class="panel">
+<h2>💬 SKULL CHAT</h2>
+<div class="messages" id="messages">
+<div class="msg">Yo. 여긴 SKULL AI다. 뭘 도와줄까? 💀</div>
 </div>
-<input id="question" placeholder="질문을 입력해..." onkeydown="if(event.key==='Enter')send()">
-<button class="send" onclick="send()">전송 ↗</button>
-<p class="note">현재 데모 버전입니다. 실제 AI 답변은 AI 모델 연결 후 작동합니다.</p>
+<input id="question" placeholder="질문을 입력해..." onkeydown="if(event.key==='Enter')chat()">
+<button onclick="chat()">전송 ↗</button>
+<p class="hint">현재 무료 데모 모드 · 미리 준비된 답변으로 작동해.</p>
 </section>
 
-<section class="card" id="image" hidden>
-<h3>🎨 이미지 생성</h3>
-<p>만들고 싶은 이미지를 설명해 봐.</p>
-<textarea id="prompt" placeholder="예: 어두운 도시의 사이버펑크 해골..."></textarea>
-<button class="send" onclick="makePrompt()">생성 요청 준비</button>
-<div class="preview" id="result">이미지 결과가 여기에 표시돼.</div>
-<p class="note">실제 이미지 생성 모델은 아직 연결되지 않았어.</p>
+<section id="generate" class="panel hidden">
+<h2>🎨 IMAGE STUDIO</h2>
+<p>머릿속 아이디어를 프롬프트로 적어봐.</p>
+<textarea id="prompt" placeholder="예: 어두운 도시를 배경으로 한 미래적인 해골 로고"></textarea>
+<button onclick="generateDemo()">미리보기 만들기</button>
+<div id="generationResult" class="hint" style="margin-top:18px"></div>
+<p class="hint">무료 데모에서는 실제 이미지 생성 대신 프롬프트를 확인해. 실제 생성 AI는 추후 연결할 수 있어.</p>
 </section>
 
-<section class="card" id="edit" hidden>
-<h3>🖼️ 이미지 합성 / 편집</h3>
-<input type="file" accept="image/*" onchange="previewImage(event)">
-<div class="preview" id="photo">이미지를 선택해 줘.</div>
-<textarea id="editText" placeholder="어떻게 편집할까?"></textarea>
-<button class="send" onclick="alert('이미지 편집 AI 연결이 필요해!')">편집 요청</button>
+<section id="edit" class="panel hidden">
+<h2>🖼️ IMAGE MIXER</h2>
+<p>합성할 이미지 두 장을 선택해.</p>
+<label>첫 번째 이미지</label>
+<input type="file" accept="image/*" id="image1" onchange="previewImage(this,'preview1')">
+<label>두 번째 이미지</label>
+<input type="file" accept="image/*" id="image2" onchange="previewImage(this,'preview2')">
+<div class="preview">
+<img id="preview1" class="hidden" alt="첫 번째 이미지 미리보기">
+<img id="preview2" class="hidden" alt="두 번째 이미지 미리보기">
+</div>
+<button onclick="mixDemo()">이미지 확인</button>
+<div id="mixResult" class="hint"></div>
+<p class="hint">현재는 업로드 및 미리보기 기능이야. 자동 AI 합성은 추후 연결할 수 있어.</p>
 </section>
 </main>
-<footer>SKULL AI · VERSION 0.2</footer>
+
+<footer>SKULL AI · BUILT DIFFERENT</footer>
 
 <script>
-function show(id,btn){
-document.querySelectorAll('.card').forEach(x=>x.hidden=true);
-document.getElementById(id).hidden=false;
-document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
-btn.classList.add('active');
+function showTab(id,button){
+ document.querySelectorAll('main section').forEach(s=>s.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
+ document.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+ button.classList.add('active');
 }
-function send(){
-let q=document.getElementById('question');
-let v=q.value.trim();
-if(!v)return;
-let box=document.getElementById('messages');
-box.innerHTML+='<div class="msg user"></div>';
-box.lastElementChild.textContent=v;
-box.innerHTML+='<div class="msg bot">아직 AI 두뇌를 연결하지 않았어. 조금만 기다려! 💀</div>';
-q.value='';
-box.scrollTop=box.scrollHeight;
+function chat(){
+ const input=document.getElementById('question');
+ const q=input.value.trim();
+ if(!q)return;
+ const box=document.getElementById('messages');
+ const mine=document.createElement('div');
+ mine.className='msg me';
+ mine.textContent=q;
+ box.appendChild(mine);
+ const answer=document.createElement('div');
+ answer.className='msg';
+ if(/안녕|하이|ㅎㅇ/.test(q)) answer.textContent='Yo! 반갑다. 오늘도 제대로 달려보자. 💀';
+ else if(/이름|누구/.test(q)) answer.textContent='내 이름은 SKULL AI. 기억해 둬.';
+ else if(/축구|농구|스포츠/.test(q)) answer.textContent='스포츠 얘기라면 환영이지. 어떤 게 궁금해?';
+ else answer.textContent='질문 접수 완료. 현재는 무료 데모라서 모든 질문에 답할 수는 없어. 실제 AI 두뇌는 추후 연결 예정!';
+ box.appendChild(answer);
+ box.scrollTop=box.scrollHeight;
+ input.value='';
 }
-function makePrompt(){
-let p=document.getElementById('prompt').value.trim();
-document.getElementById('result').textContent=p?'이미지 생성 요청 준비 완료: '+p:'먼저 설명을 입력해 줘!';
+function generateDemo(){
+ const p=document.getElementById('prompt').value.trim();
+ const result=document.getElementById('generationResult');
+ result.textContent=p?'💀 프롬프트 저장 완료!\n\n'+p+'\n\n실제 이미지 생성 기능은 AI 연결 후 활성화돼.':'먼저 프롬프트를 입력해.';
 }
-function previewImage(e){
-let f=e.target.files[0];
-if(!f)return;
-let img=document.createElement('img');
-img.src=URL.createObjectURL(f);
-let area=document.getElementById('photo');
-area.innerHTML='';
-area.appendChild(img);
+function previewImage(input,id){
+ const img=document.getElementById(id);
+ if(input.files&&input.files[0]){
+  img.src=URL.createObjectURL(input.files[0]);
+  img.classList.remove('hidden');
+ }
+}
+function mixDemo(){
+ const a=document.getElementById('image1').files[0];
+ const b=document.getElementById('image2').files[0];
+ document.getElementById('mixResult').textContent=
+ a&&b?'💀 이미지 2장 업로드 완료! 미리보기를 확인해.':
+ '이미지 두 장을 모두 선택해 줘.';
 }
 </script>
 </body>
+</html>
+
 </html>
